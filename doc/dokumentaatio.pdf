@@ -1,0 +1,6 @@
+Johdanto:
+
+Sovellus pitää kirjaa käyttäjien omistamista steam-peleistä, ja käyttäjät voivat sovelluksen avulla tarkistaa, omistaako joku muu samoja pelejä. Näin käyttäjä voi löytää itselleen peliseuraa. Peleihin liittyvää tietoa voidaan myös tallentaa, kuten linkkejä backup-savejen sijainteihin tms. Tarkoituksena on käyttää Steamin APIta käyttökokemuksen parantamiseksi.
+
+Järjestelmä toteutetaan laitoksen users-palvelimella, ja se koodataan PHP:llä. Tietokantana toimii PostgreSQL.
+
