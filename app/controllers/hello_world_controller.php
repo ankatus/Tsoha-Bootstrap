@@ -15,4 +15,16 @@
     public static function login(){
       View::make("suunnitelmat/login.html");
     }
+
+    public static function add(){
+      View::make("suunnitelmat/addgame.html");
+    }
+
+    public static function list(){
+      View::make("suunnitelmat/list.html");
+    }
+
+    public static function remove(){
+      View::make("suunnitelmat/removeaccount.html");
+    }
   }
