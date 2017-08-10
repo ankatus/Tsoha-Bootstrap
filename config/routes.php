@@ -8,18 +8,22 @@
     HelloWorldController::sandbox();
   });
 
-  $routes->get('/login', function() {
-  	HelloWorldController::login();
-  });
-
-  $routes->get('/add', function() {
-  	HelloWorldController::add();
-  });
-
   $routes->get('/list', function() {
-  	HelloWorldController::list();
+  	GameController::listAll();
   });
 
-  $routes->get('/remove', function() {
-  	HelloWorldController::remove();
+  $routes->get('/createAccount', function() {
+    AccountController::newAccountForm();
+  });
+
+  $routes->get('/accountsList', function() {
+    AccountController::listAccounts();
+  });
+
+  $routes->get('/viewAccount/:id', function($id) {
+    AccountController::showAccount($id);
+  });
+
+  $routes->post('/newAccount', function() {
+    AccountController::storeNewAccount();
   });

@@ -7,11 +7,6 @@
    	  echo "tämä on etusivu";
     }
 
-    public static function sandbox(){
-      // Testaa koodiasi täällä
-      View::make("helloworld.html");
-    }
-
     public static function login(){
       View::make("suunnitelmat/login.html");
     }
@@ -26,5 +21,10 @@
 
     public static function remove(){
       View::make("suunnitelmat/removeaccount.html");
+    }
+
+    public static function sandbox() {
+      $games = Game::getAllGames();
+      Kint::dump($games);
     }
   }

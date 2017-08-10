@@ -1,12 +1,15 @@
 -- Lisää CREATE TABLE lauseet tähän tiedostoon
 CREATE TABLE Account (
 	account_id SERIAL PRIMARY KEY,
-	account_name varchar(50) NOT NULL
+	account_name varchar NOT NULL,
+	account_password varchar NOT NULL
 );
 
 CREATE TABLE Game (
 	game_id SERIAL PRIMARY KEY,
-	game_name varchar(50) NOT NULL
+	game_name varchar NOT NULL,
+	game_url varchar NOT NULL,
+	game_desc varchar NOT NULL
 );
 
 CREATE TABLE Account_game (
