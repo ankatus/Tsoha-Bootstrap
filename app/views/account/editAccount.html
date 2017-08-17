@@ -1,22 +1,19 @@
 {% extends 'base.html' %}
-[% block content %]
+{% block content %}
 	<h1>Edit account</h1>
 	<form method="post" action="{{base_path}}/changename">
 		<div class="form-group">
 			<label>Change username</label>
-			<input type="text" class="form-control" value="New name" name="newName">
-		</div>
-		<div class="form-group">
-			<input type="text" class="form-control" value="id" name="id">
+			<input type="text" class="form-control" name="name">
 		</div>
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
 	</form>
-	<form method="post" action="{{base_path}}/changepass">
+	<form method="post" action="{{base_path}}/changepassword">
 		<div class="form-group">
 			<label>Change password</label>
-			<input type="text" class="form-control">
+			<input type="text" class="form-control" name="password">
 		</div>
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary">Submit</button>

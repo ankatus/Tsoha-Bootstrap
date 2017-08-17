@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Add a game</h1>
+<h2>Please check if your game already exists</h2>
+<form method="post" action="{{base_path}}/addGameUserOnly">
+	<div class="form-group">
+		<select name="list" class="form-control">
+		{% for game in games %}
+			<option value="{{game.id}}">{{game.name}}</option>
+		{% endfor %}
+		</select>
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</div>
+</form>
+<h2>If not, enter Its information manually</h2>
+<form method="post" action="{{base_path}}/addGame">
+	<div class="form-group">
+		<label>Name</label>
+		<input type="text" class="form-control" name="name">
+	</div>
+	<div class="form-group">
+		<label>URL</label>
+		<input type="text" class="form-control" name="url">
+	</div>
+	<div class="form-group">
+		<label>Description</label>
+		<input type="text" class="form-control" name="desc">
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</div>
+</form>
+{% endblock %}
