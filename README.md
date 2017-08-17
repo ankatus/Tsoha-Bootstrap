@@ -8,3 +8,6 @@ Yleisiä linkkejä:
 ## Työn aihe
 
 Järjestelmä, jossa käyttäjät näkevät steam-peleihinsä liittyyvää tietoa ja voivat katsoa mitä pelejä muut käyttäjät omistavat.
+
+4. PALAUTUKSEN TUNNUS/SALASANA: aaa/aaa  
+voi myös tehdä uudet tunnukset ohjelmassa
