@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Add a friend...</h1>
+
+<h2>From a list</h2>
+<form method="post" action="{{base_path}}/addFriend">
+	<select name="list" class="form-control">
+	{% for account in accounts %}
+		<option value="{{account.id}}">{{account.name}}(id: {{account.id}})</option>
+	{% endfor %}
+	</select>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<h2>By ID</h2>
+<form method="post" action="{{base_path}}/addFriend">
+	<input type="text" class="form-control" name="id">
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

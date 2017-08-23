@@ -8,6 +8,14 @@
     GameController::sandbox();
   });
 
+  $routes->get('/friendsList', 'check_logged_in', function() {
+    AccountController::friendsList();
+  });
+
+  $routes->get('/accountsList', 'check_logged_in', function() {
+    AccountController::accountList();
+  });
+
   $routes->get('/editAccount', 'check_logged_in', function() {
     AccountController::editAccountForm();
   });
@@ -52,6 +60,18 @@
     AccountController::accountInfo();
   });
 
+  $routes->get('/viewGame/:id', 'check_logged_in', function($id) {
+    GameController::viewGame($id);
+  });
+
+  $routes->get('/addFriend', 'check_logged_in', function() {
+    AccountController::addFriendForm();
+  });
+
+  $routes->post('/gameOwners/:id', 'check_logged_in', function($id) {
+    GameController::gameOwners($id);
+  });
+
   $routes->post('/deleteAccount', function() {
     AccountController::deleteCurrentUser();
   });
@@ -79,3 +99,8 @@
   $routes->post('/changepassword', function() {
     AccountController::changePassword();
   });
+
+  $routes->post('/addFriend', function() {
+    AccountController::addFriend();
+  });
+

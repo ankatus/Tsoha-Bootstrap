@@ -1,4 +1,5 @@
 <?php
+
 class Account_game extends BaseModel {
 	public $account_id, $game_id;
 

@@ -16,3 +16,8 @@ CREATE TABLE Account_game (
 	account_id INTEGER REFERENCES Account (account_id),
 	game_id INTEGER REFERENCES Game (game_id)
 );
+
+CREATE TABLE Friend (
+	account_1_id INTEGER REFERENCES Account (account_id),
+	account_2_id INTEGER REFERENCES Account (account_id)
+);

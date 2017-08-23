@@ -1,6 +1,65 @@
 <?php
 class AccountController extends BaseController {
 
+	//
+	public static function friendsList() {
+		$accounts = Account::getAllFriendsForAccount(
+			parent::get_user_logged_in()->id);
+		View::make('account/friendsList.html', array('accounts' => $accounts));
+	}
+
+	//handles all 3 types of friend-adding: the all-accounts list, the list on the add friend -page and the "add via id" -form on the add friend -page
+	public static function addFriend() {
+		//different pages send different parameters
+		if (isset($_POST['list'])) {
+			$ids = array();
+			$ids[] = $_POST['list'];
+		} else if (isset($_POST['id'])){
+			$ids = array();
+			$ids[] = $_POST['id'];
+		} else {
+			$ids = array_keys($_POST);
+		}
+
+		$failedAdds = array();
+		$successfulAdds = 0;
+
+		//check if friends already
+		foreach ($ids as $id) {
+			if (!Friend::checkIfFriends(parent::get_user_logged_in()->id, $id)) {
+			$friend = new Friend(array('account_1_id' => parent::get_user_logged_in()->id, 'account_2_id' => $id));
+			$friend->save();
+			$successfulAdds += 1;
+			} else {
+				$failedAdds[] = $id;
+			}
+		}
+		$errors = array();
+		foreach ($failedAdds as $id) {
+			$errors[] = '(id: ' . $id . ') is already a friend';
+		}
+		$messages = array($successfulAdds . ' new friends added');
+		Redirect::to('/friendsList', array('messages' => $messages, 'errors' => $errors));
+	}
+
+	public static function addFriendForm(){
+		$accounts = Account::getAllAccounts();
+		View::make('account/addFriend.html', array('accounts' => $accounts));
+	}
+
+	//makes the all accounts -list and checks the friendship status between each account and the logged in user
+	public static function accountList() {
+		$accounts = Account::getAllAccounts();
+		foreach ($accounts as $account) {
+			if (Friend::checkIfFriends(parent::get_user_logged_in()->id, $account->id)) {
+				$account->friend = True;
+			} else {
+				$account->friend = False;
+			}
+		}
+		View::make('account/accountsList.html', array('accounts' => $accounts));
+	}
+
 	public static function accountFrontpage() {
 		View::make('frontpage.html');
 	}
@@ -9,6 +68,7 @@ class AccountController extends BaseController {
 		View::make('account/addNewAccount.html');
 	}
 
+	//creates an account-object and saves it into the DB
 	public static function storeNewAccount() {
 
 		$params = $_POST;
@@ -28,15 +88,14 @@ class AccountController extends BaseController {
 		}
 	}
 
+
 	public static function listAccounts() {
 		$accounts = Account::getAllAccounts();
 		View::make('account/accountsList.html', array('accounts' => $accounts));
 	}
 
 	public static function showAccount($id) {
-
 		$account = Account::getAccount($id);
-
 		View::make('account/viewAccount.html', array('account' => $account));
 	}
 
@@ -44,13 +103,15 @@ class AccountController extends BaseController {
 		View::make('account/login.html');
 	}
 
+	//checks if login credentials are correct, and starts the session if so
 	public static function handleLogin() {
 		$params = $_POST;
 
 		$user = Account::authenticate($params['username'], $params['password']);
 
 		if(!$user) {
-			View::make('account/login.html');
+			$errors = array('incorrect username or password');
+			View::make('account/login.html', array('errors' => $errors));
 		} else {
 			$_SESSION['user'] = $user->id;
 
@@ -80,7 +141,7 @@ class AccountController extends BaseController {
 	}
 
 	public static function deleteCurrentUserForm() {
-		View::make('account/deleteAccountForm.html');
+		View::make('account/deleteAccount.html');
 	}
 
 	public static function deleteCurrentUser() {

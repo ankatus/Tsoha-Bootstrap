@@ -39,14 +39,21 @@
         <div class="collapse navbar-collapse" id="navigation">
           <ul class="nav navbar-nav">
             <!-- Navigaation linkit -->
+            {% if user_logged_in %}
             <li><a href="{{base_path}}">Frontpage</a></li>
-            <li><a href="{{base_path}}/createAccount">Create account</a></li>
             <li><a href="{{base_path}}/list">Game list</a></li>
             <li><a href="{{base_path}}/addGame">Add game</a></li>
             <li><a href="{{base_path}}/editAccount">Edit account</a></li>
             <li><a href="{{base_path}}/accountInfo">Account info</a></li>
+            <li><a href="{{base_path}}/accountsList">List of accounts</a></li>
+            <li><a href="{{base_path}}/friendsList">List of friends</a></li>
+            <li><a href="{{base_path}}/addFriend">Add a friend</a></li>
             <li><a href="{{base_path}}/deleteAccount"><font color="red">Delete account</font></a></li>
             <li><a href="{{base_path}}/logout"><font color="red">logout</font></a></li>
+            {% else %}
+            <li><a href="{{base_path}}/createAccount">Create account</a></li>
+            <li><a href="{{base_path}}/login">Log in</a></li>
+            {% endif %}
           </ul>
         </div>
       </div>

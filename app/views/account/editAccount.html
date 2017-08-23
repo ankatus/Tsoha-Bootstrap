@@ -3,7 +3,7 @@
 	<h1>Edit account</h1>
 	<form method="post" action="{{base_path}}/changename">
 		<div class="form-group">
-			<label>Change username</label>
+			<label>Change username (Current name: {{user_logged_in.name}})</label>
 			<input type="text" class="form-control" name="name">
 		</div>
 		<div class="form-group">
@@ -12,7 +12,7 @@
 	</form>
 	<form method="post" action="{{base_path}}/changepassword">
 		<div class="form-group">
-			<label>Change password</label>
+			<label>Change password (Current password: {{user_logged_in.password}})</label>
 			<input type="text" class="form-control" name="password">
 		</div>
 		<div class="form-group">

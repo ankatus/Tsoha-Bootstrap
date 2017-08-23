@@ -1,7 +1,9 @@
 <?php
+
 class Account extends BaseModel {
 
-	public $name, $password, $id, $validators;
+	//$friend is a 'hack' to get accountList working as I want it to :^)
+	public $name, $password, $id, $validators, $friend;
 
 	public function __construct($attributes) {
 		parent::__construct($attributes);
@@ -40,6 +42,23 @@ class Account extends BaseModel {
 		return $accounts;
 	}
 
+	//returns an array containing all the friends of the $id -id
+	public static function getAllFriendsForAccount($id) {
+		$query = DB::connection()->prepare('SELECT * FROM Account INNER JOIN Friend ON (Account.account_id = Friend.account_1_id OR Account.account_id = Friend.account_2_id) WHERE (Friend.account_1_id = :id OR Friend.account_2_id = :id) AND NOT account.account_id = :id');
+		$query->execute(array('id' =>$id));
+		$rows = $query->fetchAll();
+		$accounts = array();
+		foreach ($rows as $row) {
+			$accounts[] = new Account(array(
+				'name' => $row['account_name'], 
+				'password' => $row['account_password'], 
+				'id' => $row['account_id']
+				));
+		}
+		return $accounts;
+	}
+
+	//checks if the $username and $password -arguments correspond to an account in the database, and if so, returns that account
 	public static function authenticate($username, $password) {
 		$query = DB::connection()->prepare('SELECT * FROM Account WHERE account_name = :username AND account_password = :password');
 		$query->execute(array('username' => $username, 'password' => $password));
@@ -70,11 +89,44 @@ class Account extends BaseModel {
 		$query->execute(array('id' => $id));
 	}
 
+	//returns all accounts that own the game corresponding to $id
+	public static function getAllOwnersOfGame($id) {
+		$query = DB::connection()->prepare('SELECT * FROM Account INNER JOIN Account_game ON Account.account_id = Account_game.account_id WHERE Account_game.game_id = :id');
+		$query->execute(array('id' => $id));
+		$rows = $query->fetchAll();
+		$accounts = array();
+		foreach ($rows as $row) {
+			$accounts[] = new Account(array(
+				'name' => $row['account_name'],
+				'password' => $row['account_password'],
+				'id' => $row['account_id']
+				));
+		return $accounts;
+		}
+	}
+
+	//same as getAllOwnersOfGame() but only returns friends of the current logged in user
+	public static function getFriendsOwnersOfGame($gameId, $accountId) {
+		$query = DB::connection()->prepare('SELECT * FROM Account INNER JOIN Account_game ON Account.account_id = Account_game.account_id INNER JOIN Friend ON (Account.account_id = Friend.Account_1_id OR Account.account_id = Friend.account_2_id)WHERE Account_game.game_id = :gameId AND (Friend.account_1_id = :accountId OR Friend.account_2_id = :accountId) AND NOT Account.account_id = :accountId');
+		$query->execute(array('gameId' => $gameId, 'accountId' => $accountId));
+		$rows = $query->fetchAll();
+		$accounts = array();
+		foreach ($rows as $row) {
+			$accounts[] = new Account(array(
+				'name' => $row['account_name'],
+				'password' => $row['account_password'],
+				'id' => $row['account_id']
+				));
+		return $accounts;
+		}
+	}
+
 	public function save() {
 		$query = DB::connection()->prepare('INSERT INTO Account (account_name, account_password) VALUES (:name, :password)');
 		$query->execute(array('name' => $this->name, 'password' => $this->password));
 	}
 
+	//checks that this object's name is not empty, null or in use
 	public function validateName() {
 		$errors = array();
 
@@ -90,6 +142,7 @@ class Account extends BaseModel {
 		return $errors;
 	}
 
+	//checks that this accounts password is not empty or null
 	public function validatePassword() {
 		$errors = array();
 

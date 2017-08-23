@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+	<h1>{{user_logged_in.name}}'s games</h1>
+	<table class="table table-striped table-bordered">
+		<thead>
+			<tr>
+				<th>Nimi</th>
+				<th>id</th>
+				<th>description</th>
+				<th>See list of owners</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for game in games %}
+				<tr>
+					<td><a href="{{base_path}}/viewGame/{{game.id}}">{{game.name}}</td>
+					<td>{{game.id}}</td>
+					<td>{{game.description}}</td>
+					<td>
+						<form method="POST" action="{{base_path}}/gameOwners/{{game.id}}">
+							<input type="hidden" name="friendsOnly" value="1">
+							<button type="input" class="btn btn-primary">Friends</button>
+						</form>
+						<form method="POST" action="{{base_path}}/gameOwners/{{game.id}}">
+						<input type="hidden" name="friendsOnly" value="0">
+							<button type="input" class="btn btn-primary">All</button>
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
