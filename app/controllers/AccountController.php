@@ -26,7 +26,7 @@ class AccountController extends BaseController {
 
 		//check if friends already
 		foreach ($ids as $id) {
-			if (!Friend::checkIfFriends(parent::get_user_logged_in()->id, $id)) {
+			if (!Friend::checkIfFriends(parent::get_user_logged_in()->id, $id) && Account::getAccount($id) != null && paren::get_user_logged_in()->id != $id) {
 			$friend = new Friend(array('account_1_id' => parent::get_user_logged_in()->id, 'account_2_id' => $id));
 			$friend->save();
 			$successfulAdds += 1;
@@ -36,7 +36,7 @@ class AccountController extends BaseController {
 		}
 		$errors = array();
 		foreach ($failedAdds as $id) {
-			$errors[] = '(id: ' . $id . ') is already a friend';
+			$errors[] = '(id: ' . $id . ') could not be added as a friend';
 		}
 		$messages = array($successfulAdds . ' new friends added');
 		Redirect::to('/friendsList', array('messages' => $messages, 'errors' => $errors));

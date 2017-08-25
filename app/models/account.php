@@ -16,6 +16,7 @@ class Account extends BaseModel {
 		$query->execute(array('accountId' => $accountId));
 		$row = $query->fetch();
 
+		if ($row != null) {
 		$account = new Account(array(
 			'name' => $row['account_name'], 
 			'password' => $row['account_password'], 
@@ -23,6 +24,8 @@ class Account extends BaseModel {
 			'steamid' => $row['account_steamid']
 			));
 		return $account;
+		}
+		return null;
 	}
 
 	public static function getAllAccounts() {
