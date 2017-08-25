@@ -24,16 +24,12 @@
     AccountController::accountFrontPage();
   });
 
-  $routes->get('/list', 'check_logged_in', function() {
-  	GameController::currentAccountGameList();
+  $routes->get('/gamesList', 'check_logged_in', function() {
+  	GameController::gamesList();
   });
 
   $routes->get('/createAccount', function() {
     AccountController::newAccountForm();
-  });
-
-  $routes->get('/accountsList', 'check_logged_in', function() {
-    AccountController::listAccounts();
   });
 
   $routes->get('/login', function() {
@@ -66,6 +62,10 @@
 
   $routes->get('/addFriend', 'check_logged_in', function() {
     AccountController::addFriendForm();
+  });
+
+  $routes->get('/getSteamGames', 'check_logged_in', function() {
+    SteamController::getGamesForCurrentUser();
   });
 
   $routes->post('/gameOwners/:id', 'check_logged_in', function($id) {
@@ -104,3 +104,14 @@
     AccountController::addFriend();
   });
 
+  $routes->post('/editSteamId', 'check_logged_in', function() {
+    AccountController::editSteamId();
+  });
+
+  $routes->post('/removeFriend', 'check_logged_in', function() {
+    AccountController::removeFriend();
+  });
+
+  $routes->post('/removeGameFromAccount', 'check_logged_in', function() {
+    GameController::removeGameFromAccount();
+  });

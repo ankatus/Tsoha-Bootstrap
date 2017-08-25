@@ -88,12 +88,6 @@ class AccountController extends BaseController {
 		}
 	}
 
-
-	public static function listAccounts() {
-		$accounts = Account::getAllAccounts();
-		View::make('account/accountsList.html', array('accounts' => $accounts));
-	}
-
 	public static function showAccount($id) {
 		$account = Account::getAccount($id);
 		View::make('account/viewAccount.html', array('account' => $account));
@@ -125,7 +119,8 @@ class AccountController extends BaseController {
 	}
 
 	public static function editAccountForm() {
-		View::make('account/editAccount.html');
+
+		View::make('account/editAccount.html', array('account' => parent::get_user_logged_in()));
 	}
 
 	public static function changeName() {
@@ -151,5 +146,17 @@ class AccountController extends BaseController {
 
 	public static function accountInfo() {
 		View::make('account/accountInfo.html');
+	}
+
+	public static function editSteamId() {
+		$newSteamId = $_POST['steamId'];
+		Account::editSteamId(parent::get_user_logged_in()->id, $newSteamId);
+		$messages = array('steamId changed');
+		Redirect::to('/editAccount', array('messages' => $messages));
+	}
+
+	public static function removeFriend() {
+		Friend::removeFriend(parent::get_user_logged_in()->id, $_POST['removeid']);
+		Redirect::to('/friendsList');
 	}
 }

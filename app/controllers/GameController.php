@@ -2,10 +2,14 @@
 class GameController extends BaseController {
 
 
-	public static function currentAccountGameList() {
-		$accountId = parent::get_user_logged_in()->id;
-		$games = Game::getAllGamesForAccount($accountId);
-		View::make('game/gamesList.html', array('games' => $games));
+	public static function gamesList() {
+		if (isset($_GET['userOnly'])) {
+			$games = Game::getAllGamesForAccount(parent::get_user_logged_in()->id);
+			View::make('game/gamesList.html', array('games' => $games, 'userOnly' => 1));
+		} else {
+			$games = Game::getAllGames();
+			View::make('game/gamesList.html', array('games' => $games));
+		}
 	}
 
 	public static function addGameForm() {
@@ -42,15 +46,20 @@ class GameController extends BaseController {
 
 	//only adds a new Account_game entry to the DB
 	public static function addGameUserOnly() {
-		$account_id = parent::get_user_logged_in()->id;
-		$game_id = $_POST['list'];
-		$account_game = new Account_game(array(
-			'account_id' => $account_id,
-			'game_id' => $game_id
-			));
-		$account_game->save();
+		$accountId = parent::get_user_logged_in()->id;
+		$gameId = $_POST['list'];
 
-		Redirect::to('/addGame');
+		if (!Account_game::checkIfAccountOwnsGame($accountId, $gameId)) {
+			$account_game = new Account_game(array(
+				'account_id' => $accountId,
+				'game_id' => $gameId
+			));
+			$account_game->save();
+			Redirect::to('/addGame');
+		} else {
+			$errors = array('you already own that game');
+			Redirect::to('/addGame', array('errors' => $errors));
+		}
 	}
 
 	public static function viewGame($id) {
@@ -68,6 +77,14 @@ class GameController extends BaseController {
 			$accounts = Account::getAllOwnersOfGame($id);
 		}
 		View::make('game/gameOwners.html', array('game' => $game, 'accounts' => $accounts, 'friendsOnly' => $friendsOnly));
+	}
+
+	public static function removeGameFromAccount() {
+		$gameId = $_POST['gameId'];
+		$accountId = parent::get_user_logged_in()->id;
+		Account_game::remove($accountId, $gameId);
+		$messages = array('game removed');
+		Redirect::to('/gamesList?userOnly=1', array('messages' => $messages));
 	}
 
 	public static function sandbox() {

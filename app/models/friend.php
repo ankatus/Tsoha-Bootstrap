@@ -21,8 +21,13 @@ class Friend extends BaseModel {
 		if($id1 == $id2) {
 			return False;
 		} else {
-		return False;
+			return False;
 		}
+	}
+
+	public static function removeFriend($id1, $id2) {
+		$query = DB::connection()->prepare('DELETE FROM Friend WHERE (account_1_id = :id1 AND account_2_id = :id2) OR (account_1_id = :id2 AND account_2_id = :id1)');
+		$query->execute(array('id1' => $id1, 'id2' => $id2));
 	}
 
 	public function save() {

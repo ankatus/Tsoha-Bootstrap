@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1><a href="http://{{game.url}}">{{game.name}}</a></h1>
+<img src="{{game.imgUrl}}">
+<h1><a href="{{game.url}}">{{game.name}}</a></h1>
 <ul>
 	<li>
-		<strong>ID: {{game.id}}</strong>
+		<strong>ID: </strong>{{game.id}}
+	</li>
+	<li>
+		<strong>Description: </strong>{{game.desc}}
 	</li>
 </ul>
 {% endblock %}

@@ -6,7 +6,9 @@
 <form method="post" action="{{base_path}}/addFriend">
 	<select name="list" class="form-control">
 	{% for account in accounts %}
+		{% if account.id != user_logged_in.id %}
 		<option value="{{account.id}}">{{account.name}}(id: {{account.id}})</option>
+		{% endif %}
 	{% endfor %}
 	</select>
 	<button type="submit" class="btn btn-primary">Submit</button>

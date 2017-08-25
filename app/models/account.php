@@ -3,7 +3,7 @@
 class Account extends BaseModel {
 
 	//$friend is a 'hack' to get accountList working as I want it to :^)
-	public $name, $password, $id, $validators, $friend;
+	public $name, $password, $id, $steamid, $validators, $friend;
 
 	public function __construct($attributes) {
 		parent::__construct($attributes);
@@ -19,7 +19,8 @@ class Account extends BaseModel {
 		$account = new Account(array(
 			'name' => $row['account_name'], 
 			'password' => $row['account_password'], 
-			'id' => $row['account_id']
+			'id' => $row['account_id'],
+			'steamid' => $row['account_steamid']
 			));
 		return $account;
 	}
@@ -35,7 +36,8 @@ class Account extends BaseModel {
 			$accounts[] = new Account(array(
 				'name' => $row['account_name'], 
 				'password' => $row['account_password'], 
-				'id' => $row['account_id']
+				'id' => $row['account_id'],
+				'steamid' => $row['account_steamid']
 				));
 		}
 
@@ -52,7 +54,8 @@ class Account extends BaseModel {
 			$accounts[] = new Account(array(
 				'name' => $row['account_name'], 
 				'password' => $row['account_password'], 
-				'id' => $row['account_id']
+				'id' => $row['account_id'],
+				'steamid' => $row['account_steamid']
 				));
 		}
 		return $accounts;
@@ -67,7 +70,9 @@ class Account extends BaseModel {
 			$account = new Account(array(
 				'name' => $row['account_name'],
 				'password' => $row['account_password'],
-				'id' => $row['account_id']));
+				'id' => $row['account_id'],
+				'steamid' => $row['account_steamid']
+				));
 			return $account;
 		} else {
 			return null;
@@ -85,6 +90,10 @@ class Account extends BaseModel {
 	}
 
 	public static function deleteUser($id) {
+		$query = DB::connection()->prepare('DELETE FROM Account_game WHERE Account_id = :id');
+		$query->execute(array('id' => $id));
+		$query = DB::connection()->prepare('DELETE FROM Friend WHERE Account_1_id = :id OR Account_2_id = :id');
+		$query->execute(array('id' => $id));
 		$query = DB::connection()->prepare('DELETE FROM Account WHERE Account_id = :id');
 		$query->execute(array('id' => $id));
 	}
@@ -99,10 +108,11 @@ class Account extends BaseModel {
 			$accounts[] = new Account(array(
 				'name' => $row['account_name'],
 				'password' => $row['account_password'],
-				'id' => $row['account_id']
+				'id' => $row['account_id'],
+				'steamid' => $row['account_steamid']
 				));
-		return $accounts;
 		}
+		return $accounts;
 	}
 
 	//same as getAllOwnersOfGame() but only returns friends of the current logged in user
@@ -115,14 +125,20 @@ class Account extends BaseModel {
 			$accounts[] = new Account(array(
 				'name' => $row['account_name'],
 				'password' => $row['account_password'],
-				'id' => $row['account_id']
+				'id' => $row['account_id'],
+				'steamid' => $row['account_steamid']
 				));
-		return $accounts;
 		}
+		return $accounts;
+	}
+
+	public static function editSteamid($accountId, $steamid) {
+		$query = DB::connection()->prepare('UPDATE Account SET account_steamid = :steamid WHERE account_id = :accountId');
+		$query->execute(array('steamid' => $steamid, 'accountId' => $accountId));
 	}
 
 	public function save() {
-		$query = DB::connection()->prepare('INSERT INTO Account (account_name, account_password) VALUES (:name, :password)');
+		$query = DB::connection()->prepare('INSERT INTO Account (account_name, account_password, account_steamid) VALUES (:name, :password, null)');
 		$query->execute(array('name' => $this->name, 'password' => $this->password));
 	}
 

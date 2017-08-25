@@ -13,6 +13,11 @@
 				<tr>
 					<td>{{account.name}}</td>
 					<td>{{account.id}}</td>
+					<td>
+						<form method="post" action="{{base_path}}/removeFriend">
+							<input type="hidden" value="{{account.id}}" name="removeid">
+							<button type="submit" class="btn btn-primary">Remove</button>
+						</form>
 				</tr>
 			{% endfor %}
 		</tbody>

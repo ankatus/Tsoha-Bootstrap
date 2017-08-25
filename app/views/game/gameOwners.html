@@ -15,14 +15,14 @@ accounts
 		</tr>
 	</thead>
 	<tbody>
+	{% for account in accounts %}
 		<tr>
-		{% for account in accounts %}
 			<td>
 			<a href="{{base_path}}/viewAccount/{{account.id}}">{{account.name}}</a>
 			</td>
 			<td>{{account.id}}</td>
-		{% endfor %}
 		</tr>
+	{% endfor %}
 	</tbody>
 </table>
 {% endblock %}

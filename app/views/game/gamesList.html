@@ -1,13 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
+	<form method="GET" action="{{base_path}}/gamesList">
+		<input type="hidden" name="userOnly">
+		<button type="submit" class="btn btn-primary">Your games</button>
+	</form>
+	<form method="GET" action="{{base_path}}/gamesList">
+		<button type="submit" class="btn btn-primary">All games</button>
+	</form>
+	{% if userOnly %}
 	<h1>{{user_logged_in.name}}'s games</h1>
+	{% else %}
+	<h1>All games</h1>
+	{% endif %}
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>
-				<th>Nimi</th>
+				<th>name</th>
 				<th>id</th>
 				<th>description</th>
 				<th>See list of owners</th>
+				{% if userOnly %}
+				<th>Remove</th>
+				{% endif %}
 			</tr>
 		</thead>
 		<tbody>
@@ -15,7 +29,7 @@
 				<tr>
 					<td><a href="{{base_path}}/viewGame/{{game.id}}">{{game.name}}</td>
 					<td>{{game.id}}</td>
-					<td>{{game.description}}</td>
+					<td>{{game.desc}}</td>
 					<td>
 						<form method="POST" action="{{base_path}}/gameOwners/{{game.id}}">
 							<input type="hidden" name="friendsOnly" value="1">
@@ -26,6 +40,14 @@
 							<button type="input" class="btn btn-primary">All</button>
 						</form>
 					</td>
+					{% if userOnly %}
+					<td>
+						<form method="POST" action="{{base_path}}/removeGameFromAccount">
+							<input type="hidden" value="{{game.id}}" name="gameId">
+							<button type="submit" class="btn btn-danger">Remove</button>
+						</form>
+					</td>
+					{% endif %}
 				</tr>
 			{% endfor %}
 		</tbody>

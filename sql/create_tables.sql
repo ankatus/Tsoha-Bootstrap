@@ -2,14 +2,16 @@
 CREATE TABLE Account (
 	account_id SERIAL PRIMARY KEY,
 	account_name varchar NOT NULL,
-	account_password varchar NOT NULL
+	account_password varchar NOT NULL,
+	account_steamId varchar
 );
 
 CREATE TABLE Game (
 	game_id SERIAL PRIMARY KEY,
 	game_name varchar NOT NULL,
 	game_url varchar NOT NULL,
-	game_desc varchar NOT NULL
+	game_img_url varchar,
+	game_desc varchar
 );
 
 CREATE TABLE Account_game (

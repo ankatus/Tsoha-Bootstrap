@@ -3,7 +3,7 @@
 	<h1>Edit account</h1>
 	<form method="post" action="{{base_path}}/changename">
 		<div class="form-group">
-			<label>Change username (Current name: {{user_logged_in.name}})</label>
+			<label>Change username (Current name: {{account.name}})</label>
 			<input type="text" class="form-control" name="name">
 		</div>
 		<div class="form-group">
@@ -12,8 +12,17 @@
 	</form>
 	<form method="post" action="{{base_path}}/changepassword">
 		<div class="form-group">
-			<label>Change password (Current password: {{user_logged_in.password}})</label>
+			<label>Change password (Current password: {{account.password}})</label>
 			<input type="text" class="form-control" name="password">
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+	</form>
+	<form method="post" action="{{base_path}}/editSteamId">
+		<div class="form-group">
+			<label>Change your Steam id (Current id: {{account.steamid}})</label>
+			<input type="text" class="form-control" name="steamId">
 		</div>
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary">Submit</button>
