@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Hello admin</h1>
+<form method="GET" action="{{base_path}}/adminFrontpage">
+	<input type="hidden" name="deleteAccounts" value="1">
+	<button type="submit" class="btn btn-primary">Delete accounts</button>
+</form>
+<form method="GET" action="{{base_path}}/adminFrontpage">
+	<button type="submit" class="btn btn-primary">Delete games</button>
+</form>
+{% if deleteAccounts %}
+<h2>Delete account</h2>
+<form method="POST" action="{{base_path}}/adminDeleteAccount">
+	<select name="list" class="form-control">
+	{% for account in accounts %}
+		<option value="{{account.id}}">{{account.name}}(id: {{account.id}})</option>
+	{% endfor %}
+	</select>
+	<button type="submit" class="btn btn-danger">Delete</button>
+</form>
+{% else %}
+<h2>Delete game</h2>
+<form method="POST" action="{{base_path}}/adminDeleteGame">
+	<select name="list" class="form-control">
+	{% for game in games %}
+		<option value="{{game.id}}">{{game.name}}(id: {{game.id}})</option>
+	{% endfor %}
+	</select>
+	<button type="submit" class="btn btn-danger">Delete</button>
+</form>
+{% endif %}
+{% endblock %}

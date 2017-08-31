@@ -30,13 +30,14 @@ class GameController extends BaseController {
 		$errors = $newGame->errors();
 
 		if (count($errors) == 0) {
-			$game_id = $newGame->save();
-			$account_id = parent::get_user_logged_in()->id;
-			$account_game = new Account_game(array(
-				'account_id' => $account_id,
-				'game_id' => $game_id
+			$gameId = $newGame->save();
+			$accountId = parent::get_user_logged_in()->id;
+			Kint::dump(array($gameId, $accountId));
+			$accountGame = new Account_game(array(
+				'accountId' => $accountId,
+				'gameId' => $gameId
 				));
-			$account_game->save();
+			$accountGame->save();
 			$messages = array('game added');
 			Redirect::to('/addGame', array('messages' => $messages));
 		} else {
@@ -47,15 +48,22 @@ class GameController extends BaseController {
 	//only adds a new Account_game entry to the DB
 	public static function addGameUserOnly() {
 		$accountId = parent::get_user_logged_in()->id;
-		$gameId = $_POST['list'];
+		if (isset($_POST['list'])) {
+			$gameId = $_POST['list'];
+		} else {
+			Redirect::to('/addGame', array('errors' => array('nothing selected')));
+		}
 
 		if (!Account_game::checkIfAccountOwnsGame($accountId, $gameId)) {
-			$account_game = new Account_game(array(
-				'account_id' => $accountId,
-				'game_id' => $gameId
+			$accountGame = new Account_game(array(
+				'accountId' => $accountId,
+				'gameId' => $gameId
 			));
-			$account_game->save();
-			Redirect::to('/addGame');
+			$accountGame->save();
+			Redirect::to('/addGame', array('messages' => array('game added to your account')));
+		} else if (Game::getGame($gameId) == null) {
+			$errors = array("game doesn't exist");
+			Redirect::to('/addGame', array('errors' => $errors));
 		} else {
 			$errors = array('you already own that game');
 			Redirect::to('/addGame', array('errors' => $errors));

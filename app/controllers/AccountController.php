@@ -26,10 +26,10 @@ class AccountController extends BaseController {
 
 		//check if friends already
 		foreach ($ids as $id) {
-			if (!Friend::checkIfFriends(parent::get_user_logged_in()->id, $id) && Account::getAccount($id) != null && paren::get_user_logged_in()->id != $id) {
-			$friend = new Friend(array('account_1_id' => parent::get_user_logged_in()->id, 'account_2_id' => $id));
-			$friend->save();
-			$successfulAdds += 1;
+			if (!Friend::checkIfFriends(parent::get_user_logged_in()->id, $id) && Account::getAccount($id) != null && parent::get_user_logged_in()->id != $id) {
+				$friend = new Friend(array('account_1_id' => parent::get_user_logged_in()->id, 'account_2_id' => $id));
+				$friend->save();
+				$successfulAdds += 1;
 			} else {
 				$failedAdds[] = $id;
 			}
@@ -73,6 +73,11 @@ class AccountController extends BaseController {
 
 		$params = $_POST;
 
+		if ($params['name'] == 'admin' || $params['password'] == 'admin') {
+			Redirect::to('/createAccount', array('errors' => array("can't create an account with those credentials")));
+			return null;
+		}
+
 		$newAccount = new Account(array(
 			'name' => $params['name'],
 			'password' => $params['password']
@@ -100,6 +105,12 @@ class AccountController extends BaseController {
 	//checks if login credentials are correct, and starts the session if so
 	public static function handleLogin() {
 		$params = $_POST;
+
+		if ($params['username'] == 'admin' && $params['password'] == 'admin') {
+			$_SESSION['admin'] = true;
+			Redirect::to('/adminFrontpage');
+			return null;
+		}
 
 		$user = Account::authenticate($params['username'], $params['password']);
 
@@ -140,7 +151,7 @@ class AccountController extends BaseController {
 	}
 
 	public static function deleteCurrentUser() {
-		Account::deleteUser(parent::get_user_logged_in()->id);
+		Account::deleteAccount(parent::get_user_logged_in()->id);
 		Redirect::to('/logout');
 	}
 

@@ -4,8 +4,16 @@
     BaseController::check_logged_in();
   };
 
+  function check_admin() {
+    BaseController::check_admin();
+  };
+
   $routes->get('/sandbox', function() {
     GameController::sandbox();
+  });
+
+  $routes->get('/adminFrontpage', 'check_admin', function() {
+    AdminController::adminFrontpage();
   });
 
   $routes->get('/friendsList', 'check_logged_in', function() {
@@ -114,4 +122,12 @@
 
   $routes->post('/removeGameFromAccount', 'check_logged_in', function() {
     GameController::removeGameFromAccount();
+  });
+
+  $routes->post('/adminDeleteAccount', 'check_admin', function() {
+    AdminController::adminDeleteAccount();
+  });
+
+  $routes->post('/adminDeleteGame', 'check_admin', function() {
+    AdminController::adminDeleteGame();
   });

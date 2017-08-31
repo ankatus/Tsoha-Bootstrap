@@ -76,6 +76,13 @@ class Game extends BaseModel {
 		}
 		return true;
 	}
+
+	public static function deleteGame($id) {
+		$query = DB::connection()->prepare('DELETE FROM Account_game WHERE game_id = :id');
+		$query->execute(array('id' => $id));
+		$query = DB::connection()->prepare('DELETE FROM Game WHERE game_id = :id');
+		$query->execute(array('id' => $id));
+	}
 	
 	public function save() {
 		$query = DB::connection()->prepare('INSERT INTO Game (game_name, game_url, game_desc, game_img_url) VALUES (:name, :url, :desc, :imgUrl) RETURNING game_id');
@@ -93,6 +100,7 @@ class Game extends BaseModel {
 		return $errors;
 	}
 
+	//checks if the database already has a game with the same name
 	public function checkForExistence() {
 		$query = DB::connection()->prepare('SELECT * FROM Game WHERE game_name = :name');
 		$query->execute(array('name' => $this->name));

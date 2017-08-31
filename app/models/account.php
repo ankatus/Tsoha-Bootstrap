@@ -92,7 +92,7 @@ class Account extends BaseModel {
 		$query->execute(array('password' => $newPassword, 'id' => $id));
 	}
 
-	public static function deleteUser($id) {
+	public static function deleteAccount($id) {
 		$query = DB::connection()->prepare('DELETE FROM Account_game WHERE Account_id = :id');
 		$query->execute(array('id' => $id));
 		$query = DB::connection()->prepare('DELETE FROM Friend WHERE Account_1_id = :id OR Account_2_id = :id');

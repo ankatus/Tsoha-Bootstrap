@@ -16,7 +16,13 @@
       // Toteuta kirjautumisen tarkistus tähän.
       // Jos käyttäjä ei ole kirjautunut sisään, ohjaa hänet toiselle sivulle (esim. kirjautumissivulle).
       if(!isset($_SESSION['user'])) {
-        Redirect::to('/login');
+        Redirect::to('/login', array('errors' => array('log in please')));
+      }
+    }
+
+    public static function check_admin() {
+      if (!isset($_SESSION['admin'])) {
+        Redirect::to('/login', array('errors' => array('not logged in as admin')));
       }
     }
 
