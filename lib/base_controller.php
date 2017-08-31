@@ -5,8 +5,8 @@
     public static function get_user_logged_in(){
       // Toteuta kirjautuneen käyttäjän haku tähän
       if (isset($_SESSION['user'])) {
-        $user_id = $_SESSION['user'];
-        $user = Account::getAccount($user_id);
+        $userId = $_SESSION['user'];
+        $user = Account::getAccount($userId);
         return $user;
       }
       return null;

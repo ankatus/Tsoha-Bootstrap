@@ -80,7 +80,7 @@
     GameController::gameOwners($id);
   });
 
-  $routes->post('/deleteAccount', function() {
+  $routes->post('/deleteAccount', 'check_logged_in', function() {
     AccountController::deleteCurrentUser();
   });
 
@@ -92,23 +92,23 @@
     AccountController::handleLogin();
   });
 
-  $routes->post('/addGame', function() {
+  $routes->post('/addGame', 'check_logged_in', function() {
     GameController::addGame();
   });
 
-  $routes->post('/addGameUserOnly', function() {
+  $routes->post('/addGameUserOnly', 'check_logged_in', function() {
     GameController::addGameUserOnly();
   });
 
-  $routes->post('/changename', function() {
+  $routes->post('/changename', 'check_logged_in', function() {
     AccountController::changeName();
   });
 
-  $routes->post('/changepassword', function() {
+  $routes->post('/changepassword', 'check_logged_in', function() {
     AccountController::changePassword();
   });
 
-  $routes->post('/addFriend', function() {
+  $routes->post('/addFriend', 'check_logged_in', function() {
     AccountController::addFriend();
   });
 
